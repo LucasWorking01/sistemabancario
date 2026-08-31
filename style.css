@@ -7,29 +7,18 @@
 }
 
 :root {
-  /* base */
   --ink: #10142b;
   --indigo: #3d3fa8;
   --indigo-deep: #1b1650;
   --mint: #00c896;
   --coral: #ff5a5f;
 
-  /* surface */
   --paper: #f4f5fa;
   --white: #ffffff;
   --line: #e4e6f1;
 
-  /* text */
   --text: #171a33;
   --muted: #767c93;
-
-  /* legacy aliases (kept so nothing referencing old names breaks) */
-  --blue: var(--indigo);
-  --dark-blue: var(--indigo-deep);
-  --background: var(--paper);
-  --border: var(--line);
-  --green: var(--mint);
-  --red: var(--coral);
 }
 
 body {
@@ -45,12 +34,14 @@ h1, h2, h3 {
 }
 
 button,
-input {
+input,
+select {
   font-family: inherit;
 }
 
 button:focus-visible,
 input:focus-visible,
+select:focus-visible,
 a:focus-visible {
   outline: 2px solid var(--indigo);
   outline-offset: 2px;
@@ -104,6 +95,7 @@ a:focus-visible {
   color: white;
   border-radius: 12px;
   font-weight: 700;
+  flex-shrink: 0;
 }
 
 .logo span span {
@@ -135,13 +127,15 @@ label {
   color: var(--text);
 }
 
-input {
+input,
+select {
   padding: 13px 14px;
   border: 1.5px solid var(--line);
   border-radius: 10px;
   outline: none;
   font-size: 14px;
   color: var(--text);
+  background: var(--white);
   transition: border-color 0.15s ease;
 }
 
@@ -149,11 +143,13 @@ input::placeholder {
   color: #b3b7cc;
 }
 
-input:focus {
+input:focus,
+select:focus {
   border-color: var(--indigo);
 }
 
-form button {
+form button,
+.movement-form button {
   border: none;
   background: var(--indigo);
   color: white;
@@ -166,11 +162,13 @@ form button {
   transition: background 0.15s ease, transform 0.1s ease;
 }
 
-form button:hover {
+form button:hover,
+.movement-form button:hover {
   background: var(--indigo-deep);
 }
 
-form button:active {
+form button:active,
+.movement-form button:active {
   transform: scale(0.99);
 }
 
@@ -190,11 +188,16 @@ form button:active {
 }
 
 #loginMessage,
-#registerMessage {
+#registerMessage,
+#movementMessage {
   text-align: center;
   margin-top: 15px;
   font-size: 13.5px;
+  min-height: 18px;
 }
+
+.message-error { color: var(--coral); }
+.message-success { color: #00a97e; }
 
 /* =========================
    SIDEBAR
@@ -393,16 +396,11 @@ form button:active {
   font-variant-numeric: tabular-nums;
 }
 
-.green {
-  color: #00a97e;
-}
-
-.red {
-  color: var(--coral);
-}
+.green { color: #00a97e; }
+.red { color: var(--coral); }
 
 /* =========================
-   TRANSAÇÕES
+   MOVIMENTAÇÃO / EXTRATO
 ========================= */
 
 .content-card {
@@ -428,6 +426,17 @@ form button:active {
   margin-top: 4px;
 }
 
+.quick-action { border-bottom: none; }
+
+.movement-form {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.movement-form button { margin-top: 0; }
+
 .transaction {
   display: flex;
   align-items: center;
@@ -437,13 +446,8 @@ form button:active {
   transition: background 0.15s ease;
 }
 
-.transaction:hover {
-  background: #fafafd;
-}
-
-.transaction:last-child {
-  border-bottom: none;
-}
+.transaction:hover { background: #fafafd; }
+.transaction:last-child { border-bottom: none; }
 
 .transaction-icon {
   width: 40px;
@@ -456,15 +460,8 @@ form button:active {
   flex-shrink: 0;
 }
 
-.green-bg {
-  background: #d9f7ec;
-  color: #00a97e;
-}
-
-.red-bg {
-  background: #ffe1e2;
-  color: var(--coral);
-}
+.green-bg { background: #d9f7ec; color: #00a97e; }
+.red-bg { background: #ffe1e2; color: var(--coral); }
 
 .transaction-info {
   flex: 1;
@@ -473,8 +470,19 @@ form button:active {
   gap: 4px;
 }
 
-.transaction-info small {
+.transaction-info small { color: var(--muted); }
+
+.transaction-amount {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.empty-state {
+  padding: 40px 25px;
+  text-align: center;
   color: var(--muted);
+  font-size: 14px;
 }
 
 /* =========================
@@ -535,66 +543,32 @@ form button:active {
   margin-bottom: 6px;
 }
 
-.profile-grid strong {
-  font-size: 15px;
-}
+.profile-grid strong { font-size: 15px; }
 
 /* =========================
    RESPONSIVO
 ========================= */
 
 @media (max-width: 900px) {
-  .cards {
-    grid-template-columns: 1fr;
-  }
+  .cards { grid-template-columns: 1fr; }
 
-  .sidebar {
-    width: 74px;
-    padding: 20px 8px;
-  }
+  .sidebar { width: 74px; padding: 20px 8px; }
+  .sidebar-logo span { display: none; }
+  .sidebar-logo { justify-content: center; padding: 0; }
 
-  .sidebar-logo span {
-    display: none;
-  }
+  .nav-item { text-align: center; font-size: 0; }
+  .nav-item:first-letter { font-size: 20px; }
 
-  .sidebar-logo {
-    justify-content: center;
-    padding: 0;
-  }
+  .logout { text-align: center; }
 
-  .nav-item {
-    text-align: center;
-    font-size: 0;
-  }
+  .main { margin-left: 74px; padding: 24px 18px; }
 
-  .nav-item:first-letter {
-    font-size: 20px;
-  }
-
-  .logout {
-    text-align: center;
-  }
-
-  .main {
-    margin-left: 74px;
-    padding: 24px 18px;
-  }
+  .movement-form { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 600px) {
-  .auth-card {
-    padding: 30px 24px;
-  }
-
-  .profile-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .topbar {
-    align-items: flex-start;
-  }
-
-  .user span {
-    display: none;
-  }
+  .auth-card { padding: 30px 24px; }
+  .profile-grid { grid-template-columns: 1fr; }
+  .topbar { align-items: flex-start; }
+  .user span { display: none; }
 }
