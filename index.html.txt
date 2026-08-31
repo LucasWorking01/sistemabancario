@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco Teste</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- LOGIN -->
+    <section id="loginScreen" class="auth-screen">
+
+        <div class="auth-card">
+
+            <div class="logo">
+                <div class="logo-icon">B</div>
+                <strong>Banco<span>Teste</span></strong>
+            </div>
+
+            <h1>Bem-vindo</h1>
+
+            <p class="subtitle">
+                Acesse sua conta
+            </p>
+
+            <form id="loginForm">
+
+                <label>E-mail</label>
+
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="seu@email.com"
+                    required
+                >
+
+                <label>Senha</label>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Sua senha"
+                    required
+                >
+
+                <button type="submit">
+                    Entrar
+                </button>
+
+            </form>
+
+            <p id="loginMessage"></p>
+
+            <div class="switch">
+                Não possui uma conta?
+
+                <button type="button" onclick="showRegister()">
+                    Criar conta
+                </button>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CADASTRO -->
+    <section id="registerScreen" class="auth-screen hidden">
+
+        <div class="auth-card">
+
+            <div class="logo">
+                <div class="logo-icon">B</div>
+                <strong>Banco<span>Teste</span></strong>
+            </div>
+
+            <h1>Criar conta</h1>
+
+            <p class="subtitle">
+                Preencha seus dados
+            </p>
+
+            <form id="registerForm">
+
+                <label>Nome completo</label>
+
+                <input
+                    type="text"
+                    id="registerName"
+                    placeholder="Seu nome"
+                    required
+                >
+
+                <label>CPF</label>
+
+                <input
+                    type="text"
+                    id="registerCpf"
+                    placeholder="000.000.000-00"
+                    required
+                >
+
+                <label>E-mail</label>
+
+                <input
+                    type="email"
+                    id="registerEmail"
+                    placeholder="seu@email.com"
+                    required
+                >
+
+                <label>Telefone</label>
+
+                <input
+                    type="text"
+                    id="registerPhone"
+                    placeholder="(00) 00000-0000"
+                >
+
+                <label>Senha</label>
+
+                <input
+                    type="password"
+                    id="registerPassword"
+                    placeholder="Sua senha"
+                    required
+                >
+
+                <button type="submit">
+                    Criar conta
+                </button>
+
+            </form>
+
+            <p id="registerMessage"></p>
+
+            <div class="switch">
+                Já possui uma conta?
+
+                <button type="button" onclick="showLogin()">
+                    Fazer login
+                </button>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- DASHBOARD -->
+    <section id="appScreen" class="hidden">
+
+        <aside class="sidebar">
+
+            <div class="sidebar-logo">
+                <div class="logo-icon">B</div>
+                <strong>BancoTeste</strong>
+            </div>
+
+            <nav>
+
+                <button
+                    class="nav-item active"
+                    onclick="showPage('dashboard')"
+                >
+                    🏠 Dashboard
+                </button>
+
+                <button
+                    class="nav-item"
+                    onclick="showPage('profile')"
+                >
+                    👤 Meu perfil
+                </button>
+
+            </nav>
+
+            <button
+                class="logout"
+                onclick="logout()"
+            >
+                🚪 Sair
+            </button>
+
+        </aside>
+
+
+        <main class="main">
+
+            <header class="topbar">
+
+                <div>
+
+                    <h2 id="pageTitle">
+                        Dashboard
+                    </h2>
+
+                    <p id="welcomeText">
+                        Bem-vindo!
+                    </p>
+
+                </div>
+
+                <div class="user">
+
+                    <div
+                        class="avatar"
+                        id="avatar"
+                    >
+                        U
+                    </div>
+
+                    <span id="headerName">
+                        Usuário
+                    </span>
+
+                </div>
+
+            </header>
+
+
+            <!-- DASHBOARD -->
+
+            <div id="dashboardPage">
+
+                <div class="cards">
+
+                    <div class="balance-card">
+
+                        <span>
+                            Saldo disponível
+                        </span>
+
+                        <h1 id="balance">
+                            R$ 1.230,50
+                        </h1>
+
+                        <small>
+                            Conta corrente
+                        </small>
+
+                    </div>
+
+
+                    <div class="info-card">
+
+                        <span>
+                            Entradas
+                        </span>
+
+                        <strong
+                            id="income"
+                            class="green"
+                        >
+                            R$ 1.350,00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-card">
+
+                        <span>
+                            Saídas
+                        </span>
+
+                        <strong
+                            id="expense"
+                            class="red"
+                        >
+                            R$ 119,50
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TRANSAÇÕES -->
+
+                <div class="content-card">
+
+                    <div class="card-title">
+
+                        <h3>
+                            Últimas transações
+                        </h3>
+
+                        <span>
+                            Histórico da conta
+                        </span>
+
+                    </div>
+
+
+                    <div class="transactions">
+
+                        <div class="transaction">
+
+                            <div class="transaction-icon green-bg">
+                                ↓
+                            </div>
+
+                            <div class="transaction-info">
+
+                                <strong>
+                                    Depósito inicial
+                                </strong>
+
+                                <small>
+                                    Hoje
+                                </small>
+
+                            </div>
+
+                            <strong class="green">
+                                + R$ 1.000,00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="transaction">
+
+                            <div class="transaction-icon red-bg">
+                                ↑
+                            </div>
+
+                            <div class="transaction-info">
+
+                                <strong>
+                                    Pagamento
+                                </strong>
+
+                                <small>
+                                    Ontem
+                                </small>
+
+                            </div>
+
+                            <strong class="red">
+                                - R$ 120,00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="transaction">
+
+                            <div class="transaction-icon green-bg">
+                                ↓
+                            </div>
+
+                            <div class="transaction-info">
+
+                                <strong>
+                                    Transferência recebida
+                                </strong>
+
+                                <small>
+                                    28/08/2026
+                                </small>
+
+                            </div>
+
+                            <strong class="green">
+                                + R$ 350,00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PERFIL -->
+
+            <div
+                id="profilePage"
+                class="hidden"
+            >
+
+                <div class="profile-card">
+
+                    <div class="profile-header">
+
+                        <div
+                            class="profile-avatar"
+                            id="profileAvatar"
+                        >
+                            U
+                        </div>
+
+                        <div>
+
+                            <h2 id="profileName">
+                                Usuário
+                            </h2>
+
+                            <p>
+                                Cliente Banco Teste
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="profile-grid">
+
+                        <div>
+                            <span>Nome completo</span>
+
+                            <strong id="profileFullName">
+                                -
+                            </strong>
+                        </div>
+
+
+                        <div>
+                            <span>CPF</span>
+
+                            <strong id="profileCpf">
+                                -
+                            </strong>
+                        </div>
+
+
+                        <div>
+                            <span>E-mail</span>
+
+                            <strong id="profileEmail">
+                                -
+                            </strong>
+                        </div>
+
+
+                        <div>
+                            <span>Telefone</span>
+
+                            <strong id="profilePhone">
+                                -
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </section>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>

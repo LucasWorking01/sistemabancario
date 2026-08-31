@@ -1,0 +1,448 @@
+// =====================================
+// ELEMENTOS
+// =====================================
+
+const loginScreen =
+    document.getElementById("loginScreen");
+
+const registerScreen =
+    document.getElementById("registerScreen");
+
+const appScreen =
+    document.getElementById("appScreen");
+
+
+// =====================================
+// MOSTRAR LOGIN
+// =====================================
+
+function showLogin() {
+
+    registerScreen.classList.add("hidden");
+
+    loginScreen.classList.remove("hidden");
+}
+
+
+// =====================================
+// MOSTRAR CADASTRO
+// =====================================
+
+function showRegister() {
+
+    loginScreen.classList.add("hidden");
+
+    registerScreen.classList.remove("hidden");
+}
+
+
+// =====================================
+// CADASTRO
+// =====================================
+
+document
+    .getElementById("registerForm")
+    .addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        const name =
+            document.getElementById("registerName").value;
+
+        const cpf =
+            document.getElementById("registerCpf").value;
+
+        const email =
+            document.getElementById("registerEmail").value;
+
+        const phone =
+            document.getElementById("registerPhone").value;
+
+        const password =
+            document.getElementById("registerPassword").value;
+
+        const message =
+            document.getElementById("registerMessage");
+
+
+        // Verifica senha
+
+        if (password.length < 6) {
+
+            message.style.color = "#e5484d";
+
+            message.textContent =
+                "A senha precisa ter pelo menos 6 caracteres.";
+
+            return;
+        }
+
+
+        // Cria usuário
+
+        const user = {
+
+            name: name,
+
+            cpf: cpf,
+
+            email: email,
+
+            phone: phone,
+
+            password: password,
+
+            balance: 1230.50
+        };
+
+
+        // Salva no navegador
+
+        localStorage.setItem(
+            "bancoUser",
+            JSON.stringify(user)
+        );
+
+
+        message.style.color = "#16a56a";
+
+        message.textContent =
+            "Conta criada com sucesso!";
+
+
+        // Limpa formulário
+
+        document
+            .getElementById("registerForm")
+            .reset();
+
+
+        // Volta para login
+
+        setTimeout(function() {
+
+            showLogin();
+
+            document
+                .getElementById("loginEmail")
+                .value = email;
+
+        }, 1000);
+
+    });
+
+
+// =====================================
+// LOGIN
+// =====================================
+
+document
+    .getElementById("loginForm")
+    .addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+
+        const email =
+            document.getElementById("loginEmail").value;
+
+        const password =
+            document.getElementById("loginPassword").value;
+
+
+        const message =
+            document.getElementById("loginMessage");
+
+
+        const savedUser =
+            localStorage.getItem("bancoUser");
+
+
+        // Ainda não existe usuário
+
+        if (!savedUser) {
+
+            message.style.color = "#e5484d";
+
+            message.textContent =
+                "Nenhuma conta cadastrada.";
+
+            return;
+        }
+
+
+        const user =
+            JSON.parse(savedUser);
+
+
+        // Verifica dados
+
+        if (
+            email !== user.email ||
+            password !== user.password
+        ) {
+
+            message.style.color = "#e5484d";
+
+            message.textContent =
+                "E-mail ou senha incorretos.";
+
+            return;
+        }
+
+
+        // Login realizado
+
+        localStorage.setItem(
+            "loggedIn",
+            "true"
+        );
+
+
+        message.style.color = "#16a56a";
+
+        message.textContent =
+            "Login realizado!";
+
+
+        setTimeout(function() {
+
+            openDashboard();
+
+        }, 500);
+
+    });
+
+
+// =====================================
+// ABRIR DASHBOARD
+// =====================================
+
+function openDashboard() {
+
+    loginScreen.classList.add("hidden");
+
+    registerScreen.classList.add("hidden");
+
+    appScreen.classList.remove("hidden");
+
+    loadUser();
+}
+
+
+// =====================================
+// CARREGAR USUÁRIO
+// =====================================
+
+function loadUser() {
+
+    const savedUser =
+        localStorage.getItem("bancoUser");
+
+
+    if (!savedUser) {
+        return;
+    }
+
+
+    const user =
+        JSON.parse(savedUser);
+
+
+    const firstLetter =
+        user.name
+            .charAt(0)
+            .toUpperCase();
+
+
+    // Header
+
+    document
+        .getElementById("headerName")
+        .textContent = user.name;
+
+    document
+        .getElementById("welcomeText")
+        .textContent =
+        `Olá, ${user.name.split(" ")[0]}!`;
+
+
+    document
+        .getElementById("avatar")
+        .textContent =
+        firstLetter;
+
+
+    // Saldo
+
+    document
+        .getElementById("balance")
+        .textContent =
+        formatMoney(user.balance);
+
+
+    // Perfil
+
+    document
+        .getElementById("profileAvatar")
+        .textContent =
+        firstLetter;
+
+    document
+        .getElementById("profileName")
+        .textContent =
+        user.name;
+
+    document
+        .getElementById("profileFullName")
+        .textContent =
+        user.name;
+
+    document
+        .getElementById("profileCpf")
+        .textContent =
+        user.cpf;
+
+    document
+        .getElementById("profileEmail")
+        .textContent =
+        user.email;
+
+    document
+        .getElementById("profilePhone")
+        .textContent =
+        user.phone || "Não informado";
+
+
+    // Valores fictícios
+
+    document
+        .getElementById("income")
+        .textContent =
+        formatMoney(1350);
+
+    document
+        .getElementById("expense")
+        .textContent =
+        formatMoney(119.50);
+}
+
+
+// =====================================
+// TROCAR PÁGINA
+// =====================================
+
+function showPage(page) {
+
+    const dashboard =
+        document.getElementById("dashboardPage");
+
+    const profile =
+        document.getElementById("profilePage");
+
+    const title =
+        document.getElementById("pageTitle");
+
+
+    const buttons =
+        document.querySelectorAll(".nav-item");
+
+
+    buttons.forEach(function(button) {
+
+        button.classList.remove("active");
+
+    });
+
+
+    if (page === "dashboard") {
+
+        dashboard.classList.remove("hidden");
+
+        profile.classList.add("hidden");
+
+        title.textContent =
+            "Dashboard";
+
+        buttons[0].classList.add("active");
+
+    }
+
+
+    if (page === "profile") {
+
+        dashboard.classList.add("hidden");
+
+        profile.classList.remove("hidden");
+
+        title.textContent =
+            "Meu perfil";
+
+        buttons[1].classList.add("active");
+
+    }
+}
+
+
+// =====================================
+// LOGOUT
+// =====================================
+
+function logout() {
+
+    localStorage.removeItem("loggedIn");
+
+    appScreen.classList.add("hidden");
+
+    loginScreen.classList.remove("hidden");
+
+    document
+        .getElementById("loginForm")
+        .reset();
+}
+
+
+// =====================================
+// FORMATAÇÃO DE DINHEIRO
+// =====================================
+
+function formatMoney(value) {
+
+    return Number(value).toLocaleString(
+        "pt-BR",
+        {
+            style: "currency",
+            currency: "BRL"
+        }
+    );
+}
+
+
+// =====================================
+// VERIFICAR LOGIN AO ABRIR
+// =====================================
+
+function checkLogin() {
+
+    const loggedIn =
+        localStorage.getItem("loggedIn");
+
+    const user =
+        localStorage.getItem("bancoUser");
+
+
+    if (
+        loggedIn === "true" &&
+        user
+    ) {
+
+        openDashboard();
+
+    }
+
+}
+
+
+// Executa ao abrir
+
+checkLogin();
