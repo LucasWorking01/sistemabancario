@@ -1,448 +1,574 @@
-// =====================================
-// ELEMENTOS
-// =====================================
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
-const loginScreen =
-    document.getElementById("loginScreen");
-
-const registerScreen =
-    document.getElementById("registerScreen");
-
-const appScreen =
-    document.getElementById("appScreen");
-
-
-// =====================================
-// MOSTRAR LOGIN
-// =====================================
-
-function showLogin() {
-
-    registerScreen.classList.add("hidden");
-
-    loginScreen.classList.remove("hidden");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+:root {
+  --ink: #10142b;
+  --indigo: #3d3fa8;
+  --indigo-deep: #1b1650;
+  --mint: #00c896;
+  --coral: #ff5a5f;
 
-// =====================================
-// MOSTRAR CADASTRO
-// =====================================
+  --paper: #f4f5fa;
+  --white: #ffffff;
+  --line: #e4e6f1;
 
-function showRegister() {
-
-    loginScreen.classList.add("hidden");
-
-    registerScreen.classList.remove("hidden");
+  --text: #171a33;
+  --muted: #767c93;
 }
 
-
-// =====================================
-// CADASTRO
-// =====================================
-
-document
-    .getElementById("registerForm")
-    .addEventListener("submit", function(event) {
-
-        event.preventDefault();
-
-        const name =
-            document.getElementById("registerName").value;
-
-        const cpf =
-            document.getElementById("registerCpf").value;
-
-        const email =
-            document.getElementById("registerEmail").value;
-
-        const phone =
-            document.getElementById("registerPhone").value;
-
-        const password =
-            document.getElementById("registerPassword").value;
-
-        const message =
-            document.getElementById("registerMessage");
-
-
-        // Verifica senha
-
-        if (password.length < 6) {
-
-            message.style.color = "#e5484d";
-
-            message.textContent =
-                "A senha precisa ter pelo menos 6 caracteres.";
-
-            return;
-        }
-
-
-        // Cria usuário
-
-        const user = {
-
-            name: name,
-
-            cpf: cpf,
-
-            email: email,
-
-            phone: phone,
-
-            password: password,
-
-            balance: 1230.50
-        };
-
-
-        // Salva no navegador
-
-        localStorage.setItem(
-            "bancoUser",
-            JSON.stringify(user)
-        );
-
-
-        message.style.color = "#16a56a";
-
-        message.textContent =
-            "Conta criada com sucesso!";
-
-
-        // Limpa formulário
-
-        document
-            .getElementById("registerForm")
-            .reset();
-
-
-        // Volta para login
-
-        setTimeout(function() {
-
-            showLogin();
-
-            document
-                .getElementById("loginEmail")
-                .value = email;
-
-        }, 1000);
-
-    });
-
-
-// =====================================
-// LOGIN
-// =====================================
-
-document
-    .getElementById("loginForm")
-    .addEventListener("submit", function(event) {
-
-        event.preventDefault();
-
-
-        const email =
-            document.getElementById("loginEmail").value;
-
-        const password =
-            document.getElementById("loginPassword").value;
-
-
-        const message =
-            document.getElementById("loginMessage");
-
-
-        const savedUser =
-            localStorage.getItem("bancoUser");
-
-
-        // Ainda não existe usuário
-
-        if (!savedUser) {
-
-            message.style.color = "#e5484d";
-
-            message.textContent =
-                "Nenhuma conta cadastrada.";
-
-            return;
-        }
-
-
-        const user =
-            JSON.parse(savedUser);
-
-
-        // Verifica dados
-
-        if (
-            email !== user.email ||
-            password !== user.password
-        ) {
-
-            message.style.color = "#e5484d";
-
-            message.textContent =
-                "E-mail ou senha incorretos.";
-
-            return;
-        }
-
-
-        // Login realizado
-
-        localStorage.setItem(
-            "loggedIn",
-            "true"
-        );
-
-
-        message.style.color = "#16a56a";
-
-        message.textContent =
-            "Login realizado!";
-
-
-        setTimeout(function() {
-
-            openDashboard();
-
-        }, 500);
-
-    });
-
-
-// =====================================
-// ABRIR DASHBOARD
-// =====================================
-
-function openDashboard() {
-
-    loginScreen.classList.add("hidden");
-
-    registerScreen.classList.add("hidden");
-
-    appScreen.classList.remove("hidden");
-
-    loadUser();
+body {
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
 }
 
-
-// =====================================
-// CARREGAR USUÁRIO
-// =====================================
-
-function loadUser() {
-
-    const savedUser =
-        localStorage.getItem("bancoUser");
-
-
-    if (!savedUser) {
-        return;
-    }
-
-
-    const user =
-        JSON.parse(savedUser);
-
-
-    const firstLetter =
-        user.name
-            .charAt(0)
-            .toUpperCase();
-
-
-    // Header
-
-    document
-        .getElementById("headerName")
-        .textContent = user.name;
-
-    document
-        .getElementById("welcomeText")
-        .textContent =
-        `Olá, ${user.name.split(" ")[0]}!`;
-
-
-    document
-        .getElementById("avatar")
-        .textContent =
-        firstLetter;
-
-
-    // Saldo
-
-    document
-        .getElementById("balance")
-        .textContent =
-        formatMoney(user.balance);
-
-
-    // Perfil
-
-    document
-        .getElementById("profileAvatar")
-        .textContent =
-        firstLetter;
-
-    document
-        .getElementById("profileName")
-        .textContent =
-        user.name;
-
-    document
-        .getElementById("profileFullName")
-        .textContent =
-        user.name;
-
-    document
-        .getElementById("profileCpf")
-        .textContent =
-        user.cpf;
-
-    document
-        .getElementById("profileEmail")
-        .textContent =
-        user.email;
-
-    document
-        .getElementById("profilePhone")
-        .textContent =
-        user.phone || "Não informado";
-
-
-    // Valores fictícios
-
-    document
-        .getElementById("income")
-        .textContent =
-        formatMoney(1350);
-
-    document
-        .getElementById("expense")
-        .textContent =
-        formatMoney(119.50);
+h1, h2, h3 {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  letter-spacing: -0.01em;
 }
 
-
-// =====================================
-// TROCAR PÁGINA
-// =====================================
-
-function showPage(page) {
-
-    const dashboard =
-        document.getElementById("dashboardPage");
-
-    const profile =
-        document.getElementById("profilePage");
-
-    const title =
-        document.getElementById("pageTitle");
-
-
-    const buttons =
-        document.querySelectorAll(".nav-item");
-
-
-    buttons.forEach(function(button) {
-
-        button.classList.remove("active");
-
-    });
-
-
-    if (page === "dashboard") {
-
-        dashboard.classList.remove("hidden");
-
-        profile.classList.add("hidden");
-
-        title.textContent =
-            "Dashboard";
-
-        buttons[0].classList.add("active");
-
-    }
-
-
-    if (page === "profile") {
-
-        dashboard.classList.add("hidden");
-
-        profile.classList.remove("hidden");
-
-        title.textContent =
-            "Meu perfil";
-
-        buttons[1].classList.add("active");
-
-    }
+button,
+input,
+select {
+  font-family: inherit;
 }
 
-
-// =====================================
-// LOGOUT
-// =====================================
-
-function logout() {
-
-    localStorage.removeItem("loggedIn");
-
-    appScreen.classList.add("hidden");
-
-    loginScreen.classList.remove("hidden");
-
-    document
-        .getElementById("loginForm")
-        .reset();
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--indigo);
+  outline-offset: 2px;
 }
 
-
-// =====================================
-// FORMATAÇÃO DE DINHEIRO
-// =====================================
-
-function formatMoney(value) {
-
-    return Number(value).toLocaleString(
-        "pt-BR",
-        {
-            style: "currency",
-            currency: "BRL"
-        }
-    );
+.hidden {
+  display: none !important;
 }
 
+/* =========================
+   LOGIN
+========================= */
 
-// =====================================
-// VERIFICAR LOGIN AO ABRIR
-// =====================================
-
-function checkLogin() {
-
-    const loggedIn =
-        localStorage.getItem("loggedIn");
-
-    const user =
-        localStorage.getItem("bancoUser");
-
-
-    if (
-        loggedIn === "true" &&
-        user
-    ) {
-
-        openDashboard();
-
-    }
-
+.auth-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(0, 200, 150, 0.18), transparent 45%),
+    linear-gradient(135deg, var(--indigo-deep), var(--indigo) 80%);
 }
 
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 44px 40px;
+  background: var(--white);
+  border-radius: 22px;
+  box-shadow: 0 30px 60px -20px rgba(16, 20, 43, 0.45);
+}
 
-// Executa ao abrir
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 21px;
+  font-weight: 600;
+  margin-bottom: 32px;
+}
 
-checkLogin();
+.logo-icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--indigo), var(--indigo-deep));
+  color: white;
+  border-radius: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.logo span span {
+  color: var(--indigo);
+}
+
+.auth-card h1 {
+  font-size: 27px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-bottom: 26px;
+  font-size: 14.5px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 8px;
+  color: var(--text);
+}
+
+input,
+select {
+  padding: 13px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--white);
+  transition: border-color 0.15s ease;
+}
+
+input::placeholder {
+  color: #b3b7cc;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--indigo);
+}
+
+form button,
+.movement-form button {
+  border: none;
+  background: var(--indigo);
+  color: white;
+  padding: 14px;
+  border-radius: 10px;
+  margin-top: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14.5px;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+form button:hover,
+.movement-form button:hover {
+  background: var(--indigo-deep);
+}
+
+form button:active,
+.movement-form button:active {
+  transform: scale(0.99);
+}
+
+.switch {
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 26px;
+}
+
+.switch button {
+  border: none;
+  background: none;
+  color: var(--indigo);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#loginMessage,
+#registerMessage,
+#movementMessage {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 13.5px;
+  min-height: 18px;
+}
+
+.message-error { color: var(--coral); }
+.message-success { color: #00a97e; }
+
+/* =========================
+   SIDEBAR
+========================= */
+
+#appScreen {
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: var(--ink);
+  color: white;
+  padding: 26px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 19px;
+  font-weight: 600;
+  margin-bottom: 36px;
+  padding: 0 8px;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: #9ba2c4;
+  text-align: left;
+  padding: 13px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.nav-item:hover,
+.nav-item.active {
+  background: rgba(0, 200, 150, 0.12);
+  color: var(--mint);
+}
+
+.logout {
+  margin-top: auto;
+  background: transparent;
+  color: #9ba2c4;
+  border: none;
+  padding: 13px 14px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 8px;
+  transition: color 0.15s ease;
+}
+
+.logout:hover {
+  color: var(--coral);
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main {
+  margin-left: 250px;
+  padding: 36px 42px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.topbar h2 {
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.topbar p {
+  color: var(--muted);
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #e4e2fb;
+  color: var(--indigo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.cards {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.balance-card {
+  position: relative;
+  overflow: hidden;
+  padding: 28px;
+  min-height: 180px;
+  border-radius: 20px;
+  color: white;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(0, 200, 150, 0.28), transparent 55%),
+    linear-gradient(135deg, var(--indigo), var(--indigo-deep));
+  box-shadow: 0 20px 40px -16px rgba(61, 63, 168, 0.5);
+}
+
+.balance-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 14px 14px;
+  pointer-events: none;
+}
+
+.balance-card span {
+  position: relative;
+  color: #d7d6ff;
+  font-size: 13px;
+}
+
+.balance-card h1 {
+  position: relative;
+  font-size: 36px;
+  font-weight: 700;
+  margin: 34px 0 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.balance-card small {
+  position: relative;
+  color: #c6c4ff;
+}
+
+.info-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.info-card span {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.info-card strong {
+  font-size: 23px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.green { color: #00a97e; }
+.red { color: var(--coral); }
+
+/* =========================
+   MOVIMENTAÇÃO / EXTRATO
+========================= */
+
+.content-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.card-title {
+  padding: 22px 25px;
+  border-bottom: 1px solid var(--line);
+}
+
+.card-title h3 {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.card-title span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.quick-action { border-bottom: none; }
+
+.movement-form {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.movement-form button { margin-top: 0; }
+
+.transaction {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 18px 25px;
+  border-bottom: 1px solid var(--line);
+  transition: background 0.15s ease;
+}
+
+.transaction:hover { background: #fafafd; }
+.transaction:last-child { border-bottom: none; }
+
+.transaction-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.green-bg { background: #d9f7ec; color: #00a97e; }
+.red-bg { background: #ffe1e2; color: var(--coral); }
+
+.transaction-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.transaction-info small { color: var(--muted); }
+
+.transaction-amount {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.empty-state {
+  padding: 40px 25px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* =========================
+   PERFIL
+========================= */
+
+.profile-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 900px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+}
+
+.profile-avatar {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  background: #e4e2fb;
+  color: var(--indigo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+  flex-shrink: 0;
+}
+
+.profile-header p {
+  color: var(--muted);
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.profile-grid > div {
+  padding: 20px 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.profile-grid span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.profile-grid strong { font-size: 15px; }
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 900px) {
+  .cards { grid-template-columns: 1fr; }
+
+  .sidebar { width: 74px; padding: 20px 8px; }
+  .sidebar-logo span { display: none; }
+  .sidebar-logo { justify-content: center; padding: 0; }
+
+  .nav-item { text-align: center; font-size: 0; }
+  .nav-item:first-letter { font-size: 20px; }
+
+  .logout { text-align: center; }
+
+  .main { margin-left: 74px; padding: 24px 18px; }
+
+  .movement-form { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .auth-card { padding: 30px 24px; }
+  .profile-grid { grid-template-columns: 1fr; }
+  .topbar { align-items: flex-start; }
+  .user span { display: none; }
+}
