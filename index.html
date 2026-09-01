@@ -1,175 +1,220 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Nortis · Banco digital</title>
-<link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Nortis · Banco Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- =========================
-     LOGIN / CADASTRO
-========================= -->
-<section id="authScreen" class="auth-screen">
-  <div class="auth-card">
-    <div class="logo">
-      <div class="logo-icon">N</div>
-      <span>nort<span>is</span></span>
-    </div>
-
-    <!-- LOGIN -->
-    <form id="loginForm">
-      <h1>Entrar na conta</h1>
-      <p class="subtitle">Acesse seu saldo, extrato e transferências.</p>
-
-      <label for="loginEmail">E-mail</label>
-      <input type="email" id="loginEmail" placeholder="voce@email.com" required />
-
-      <label for="loginPassword">Senha</label>
-      <input type="password" id="loginPassword" placeholder="••••••••" required />
-
-      <button type="submit">Entrar</button>
-      <p id="loginMessage"></p>
-    </form>
-
-    <!-- CADASTRO -->
-    <form id="registerForm" class="hidden">
-      <h1>Criar conta</h1>
-      <p class="subtitle">Leva menos de um minuto.</p>
-
-      <label for="registerName">Nome completo</label>
-      <input type="text" id="registerName" placeholder="Seu nome" required />
-
-      <label for="registerEmail">E-mail</label>
-      <input type="email" id="registerEmail" placeholder="voce@email.com" required />
-
-      <label for="registerPassword">Senha</label>
-      <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres" required />
-
-      <button type="submit">Criar conta</button>
-      <p id="registerMessage"></p>
-    </form>
-
-    <p class="switch">
-      <span id="switchText">Ainda não tem conta?</span>
-      <button type="button" id="switchButton">Criar conta</button>
-    </p>
-  </div>
-</section>
-
-<!-- =========================
-     APP
-========================= -->
-<div id="appScreen" class="hidden">
-
-  <aside class="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-icon">N</div>
-      <span>nort<span>is</span></span>
-    </div>
-    <nav>
-      <button class="nav-item active" data-view="dashboard">Início</button>
-      <button class="nav-item" data-view="transactions">Extrato</button>
-      <button class="nav-item" data-view="profile">Perfil</button>
-    </nav>
-    <button class="logout" id="logoutButton">Sair</button>
-  </aside>
-
-  <main class="main">
-
-    <div class="topbar">
-      <div>
-        <h2 id="greeting">Olá</h2>
-        <p>Aqui está o resumo da sua conta.</p>
-      </div>
-      <div class="user">
-        <div class="avatar" id="userAvatar">–</div>
-        <span id="userNameTop">–</span>
-      </div>
-    </div>
-
-    <!-- DASHBOARD -->
-    <section id="dashboardView">
-      <div class="cards">
-        <div class="balance-card">
-          <span>Saldo disponível</span>
-          <h1 id="balanceValue">R$ 0,00</h1>
-          <small id="accountNumber">Conta —</small>
-        </div>
-        <div class="info-card">
-          <span>Entradas do mês</span>
-          <strong class="green" id="incomeValue">R$ 0,00</strong>
-        </div>
-        <div class="info-card">
-          <span>Saídas do mês</span>
-          <strong class="red" id="expenseValue">R$ 0,00</strong>
-        </div>
+  <!-- AUTH SCREEN -->
+  <section id="authScreen" class="auth-screen">
+    <div class="auth-card">
+      <div class="logo">
+        <div class="logo-icon">N</div>
+        <span>nort<span>is</span></span>
       </div>
 
-      <div class="content-card">
-        <div class="card-title quick-action">
-          <h3>Nova movimentação</h3>
-          <span>Registre um depósito ou uma retirada</span>
+      <!-- LOGIN -->
+      <form id="loginForm" class="auth-form">
+        <div class="form-header">
+          <h1>Entrar na conta</h1>
+          <p class="subtitle">Acesse seu saldo, extrato e transferências.</p>
+        </div>
+
+        <div class="input-group">
+          <label for="loginEmail">E-mail</label>
+          <input type="email" id="loginEmail" placeholder="voce@email.com" required autocomplete="email" />
+        </div>
+
+        <div class="input-group">
+          <label for="loginPassword">Senha</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Entrar</button>
+        <p id="loginMessage" class="feedback-msg"></p>
+      </form>
+
+      <!-- REGISTER -->
+      <form id="registerForm" class="auth-form hidden">
+        <div class="form-header">
+          <h1>Criar conta</h1>
+          <p class="subtitle">Leva menos de um minuto.</p>
+        </div>
+
+        <div class="input-group">
+          <label for="registerName">Nome completo</label>
+          <input type="text" id="registerName" placeholder="Ex: Lucas Silva" required autocomplete="name" />
+        </div>
+
+        <div class="input-group">
+          <label for="registerEmail">E-mail</label>
+          <input type="email" id="registerEmail" placeholder="voce@email.com" required autocomplete="email" />
+        </div>
+
+        <div class="input-group">
+          <label for="registerPassword">Senha</label>
+          <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres" minlength="6" required autocomplete="new-password" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Criar conta</button>
+        <p id="registerMessage" class="feedback-msg"></p>
+      </form>
+
+      <div class="switch-wrapper">
+        <span id="switchText">Ainda não tem conta?</span>
+        <button type="button" id="switchButton" class="btn-link">Criar conta</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN APP -->
+  <div id="appScreen" class="app-screen hidden">
+
+    <!-- NAVIGATION (Sidebar Desktop / Bottom Bar Mobile) -->
+    <aside class="navigation">
+      <div class="sidebar-logo">
+        <div class="logo-icon">N</div>
+        <span>nort<span>is</span></span>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-item active" data-view="dashboard">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          <span>Início</span>
+        </button>
+        <button class="nav-item" data-view="transactions">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+          <span>Extrato</span>
+        </button>
+        <button class="nav-item" data-view="profile">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+          <span>Perfil</span>
+        </button>
+      </nav>
+
+      <button class="logout-btn" id="logoutButton">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        <span>Sair</span>
+      </button>
+    </aside>
+
+    <!-- CONTENT AREA -->
+    <main class="main-content">
+
+      <header class="topbar">
+        <div class="user-greeting">
+          <h2 id="greeting">Olá, Usuário</h2>
+          <p>Resumo da sua conta digital</p>
+        </div>
+        <div class="user-profile-badge">
+          <div class="avatar" id="userAvatar">--</div>
+          <span id="userNameTop" class="user-name">--</span>
+        </div>
+      </header>
+
+      <!-- DASHBOARD VIEW -->
+      <section id="dashboardView" class="view-panel">
+        <div class="metrics-grid">
+          <div class="card balance-card">
+            <span class="card-label">Saldo disponível</span>
+            <h1 id="balanceValue" class="balance-amount">R$ 0,00</h1>
+            <span id="accountNumber" class="account-tag">Conta —</span>
+          </div>
+
+          <div class="card metric-card">
+            <div class="metric-icon green">↓</div>
+            <div>
+              <span class="card-label">Entradas</span>
+              <strong class="amount green" id="incomeValue">R$ 0,00</strong>
+            </div>
+          </div>
+
+          <div class="card metric-card">
+            <div class="metric-icon red">↑</div>
+            <div>
+              <span class="card-label">Saídas</span>
+              <strong class="amount red" id="expenseValue">R$ 0,00</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="card action-card">
+          <div class="card-header">
+            <h3>Nova movimentação</h3>
+            <p>Registre um depósito ou uma retirada rápida.</p>
+          </div>
+
           <form id="movementForm" class="movement-form">
-            <input type="text" id="movementDescription" placeholder="Descrição (ex: Salário, Mercado)" required />
-            <input type="number" id="movementAmount" placeholder="Valor (R$)" step="0.01" min="0.01" required />
-            <select id="movementType">
-              <option value="deposit">Depósito</option>
-              <option value="withdraw">Retirada</option>
-            </select>
-            <button type="submit">Adicionar</button>
+            <div class="input-group">
+              <input type="text" id="movementDescription" placeholder="Descrição (ex: Mercado)" required />
+            </div>
+            <div class="input-group">
+              <input type="number" id="movementAmount" placeholder="Valor (R$)" step="0.01" min="0.01" required />
+            </div>
+            <div class="input-group">
+              <select id="movementType">
+                <option value="deposit">Depósito (+)</option>
+                <option value="withdraw">Retirada (-)</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Adicionar</button>
           </form>
-          <p id="movementMessage"></p>
+          <p id="movementMessage" class="feedback-msg"></p>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- EXTRATO -->
-    <section id="transactionsView" class="hidden">
-      <div class="content-card">
-        <div class="card-title">
-          <h3>Extrato completo</h3>
-          <span>Todas as movimentações da sua conta</span>
+      <!-- TRANSACTIONS VIEW -->
+      <section id="transactionsView" class="view-panel hidden">
+        <div class="card">
+          <div class="card-header">
+            <h3>Extrato completo</h3>
+            <p>Acompanhe seu histórico de transações.</p>
+          </div>
+          <div id="transactionsList" class="transactions-list"></div>
         </div>
-        <div id="transactionsList"></div>
-      </div>
-    </section>
+      </section>
 
-    <!-- PERFIL -->
-    <section id="profileView" class="hidden">
-      <div class="profile-card">
-        <div class="profile-header">
-          <div class="profile-avatar" id="profileAvatar">–</div>
-          <div>
-            <h2 id="profileName">–</h2>
-            <p id="profileEmail">–</p>
+      <!-- PROFILE VIEW -->
+      <section id="profileView" class="view-panel hidden">
+        <div class="card profile-card">
+          <div class="profile-header">
+            <div class="profile-avatar-lg" id="profileAvatar">--</div>
+            <div>
+              <h2 id="profileName">--</h2>
+              <p id="profileEmail">--</p>
+            </div>
+          </div>
+
+          <div class="profile-details-grid">
+            <div class="detail-item">
+              <span>Número da conta</span>
+              <strong id="profileAccount">--</strong>
+            </div>
+            <div class="detail-item">
+              <span>Agência</span>
+              <strong>0001</strong>
+            </div>
+            <div class="detail-item">
+              <span>Cliente desde</span>
+              <strong id="profileSince">--</strong>
+            </div>
+            <div class="detail-item">
+              <span>Tipo de conta</span>
+              <strong>Conta Digital Premium</strong>
+            </div>
           </div>
         </div>
-        <div class="profile-grid">
-          <div>
-            <span>Número da conta</span>
-            <strong id="profileAccount">–</strong>
-          </div>
-          <div>
-            <span>Agência</span>
-            <strong>0001</strong>
-          </div>
-          <div>
-            <span>Cliente desde</span>
-            <strong id="profileSince">–</strong>
-          </div>
-          <div>
-            <span>Tipo de conta</span>
-            <strong>Conta digital</strong>
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
 
-  </main>
-</div>
+    </main>
+  </div>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
